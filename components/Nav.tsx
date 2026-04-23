@@ -36,7 +36,7 @@ export default function Nav() {
         {/* Logo */}
         <a href="#" className="flex items-center gap-3">
           <img
-            src="/brand/aernova.png"
+            src="/brand/Aernova.png"
             alt="Aernova"
             className="w-28 h-auto object-contain"
           />
