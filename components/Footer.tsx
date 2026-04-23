@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <img
-            src="/brand/aernova.png"
+            src="/brand/Aernova.png"
             alt="Aernova"
             className="w-28 h-auto object-contain opacity-90"
           />
