@@ -78,29 +78,35 @@ export const projects: Project[] = [
 // ── Placeholder thumbnail shown before a project is opened ──
 function ProjectThumbnail({ project }: { project: Project }) {
   return (
-    <div className={`w-full h-full bg-gradient-to-br ${project.thumbnailColor} flex items-center justify-center relative overflow-hidden`}>
-      {/* Wireframe grid decoration */}
-      <svg viewBox="0 0 200 150" className="w-full h-full absolute inset-0 opacity-20">
-        {[0, 30, 60, 90, 120, 150].map((y) => (
-          <line key={`h${y}`} x1="0" y1={y} x2="200" y2={y} stroke="#00D4FF" strokeWidth="0.5" />
-        ))}
-        {[0, 40, 80, 120, 160, 200].map((x) => (
-          <line key={`v${x}`} x1={x} y1="0" x2={x} y2="150" stroke="#00D4FF" strokeWidth="0.5" />
-        ))}
-        {/* Fake 3D box */}
-        <polygon points="70,40 130,40 130,100 70,100" fill="none" stroke="#00D4FF" strokeWidth="1" opacity="0.5" />
-        <polygon points="70,40 90,25 150,25 130,40" fill="#00D4FF" opacity="0.08" stroke="#00D4FF" strokeWidth="1" />
-        <polygon points="130,40 150,25 150,85 130,100" fill="#00D4FF" opacity="0.05" stroke="#00D4FF" strokeWidth="1" />
-      </svg>
-      <span className="font-mono-dm text-[0.65rem] tracking-widest uppercase text-cyan/60 relative z-10">
-        Click to view 3D model
-      </span>
-      {/* Scan line animation */}
-      <motion.div
-        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent"
-        animate={{ y: [0, 150, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-      />
+    <div
+      className={`w-full h-full bg-gradient-to-br ${project.thumbnailColor} relative overflow-hidden`}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.14),transparent_35%)]" />
+
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-6 left-6 w-24 h-24 border border-cyan/30 rounded-full" />
+        <div className="absolute bottom-8 right-8 w-32 h-32 border border-electric/20 rotate-12" />
+        <div className="absolute top-1/2 left-1/2 w-40 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent -translate-x-1/2" />
+        <div className="absolute top-1/2 left-1/2 h-40 w-px bg-gradient-to-b from-transparent via-cyan/30 to-transparent -translate-y-1/2" />
+      </div>
+
+      <div className="absolute top-4 left-4">
+        <span className="font-mono-dm text-[0.65rem] tracking-widest uppercase text-cyan/70">
+          {project.category}
+        </span>
+      </div>
+
+      <div className="absolute bottom-4 left-4 right-4">
+        <div className="h-px w-full bg-gradient-to-r from-cyan/40 via-cyan/10 to-transparent mb-3" />
+        <div className="flex items-center justify-between">
+          <span className="font-mono-dm text-[0.7rem] tracking-widest uppercase text-slate-300/80">
+            Preview
+          </span>
+          <span className="font-mono-dm text-[0.7rem] tracking-widest uppercase text-cyan/70">
+            {project.year}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -232,7 +238,7 @@ export default function Projects() {
               PROJECT<br />PORTFOLIO
             </h2>
             <p className="font-body font-light text-frost/60 text-base max-w-sm leading-relaxed">
-              Interactive 3D models from real DroneDeploy captures. Click any project to
+              Interactive 3D models from real drone captures. Click any project to
               explore the full model.
             </p>
           </div>
