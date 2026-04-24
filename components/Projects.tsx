@@ -103,7 +103,7 @@ function ProjectThumbnail({ project }: { project: Project }) {
             Preview
           </span>
           <span className="font-mono-dm text-[0.7rem] tracking-widest uppercase text-cyan/70">
-            {project.year}
+            Aernova
           </span>
         </div>
       </div>
