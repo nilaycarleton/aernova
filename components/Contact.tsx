@@ -84,7 +84,7 @@ export default function Contact() {
             className="lg:col-span-2 flex flex-col gap-8"
           >
             {[
-              { icon: Mail, label: 'Email', value: 'rajasdroneservice@gmail.com', href: 'mailto:rajasdroneservice@gmail.com' },
+              { icon: Mail, label: 'Email', value: 'admin@aernova.ca', href: 'mailto:admin@aernova.ca' },
               { icon: Phone, label: 'Phone', value: '+1 (647) 710-8581', href: 'tel:+16477108581' },
               { icon: MapPin, label: 'Serving', value: 'Toronto & Greater Toronto Area, ON', href: null },
             ].map((item) => {
