@@ -86,7 +86,7 @@ export default function Contact() {
             {[
               { icon: Mail, label: 'Email', value: 'sales@aernova.ca', href: 'mailto:sales@aernova.ca' },
               { icon: Phone, label: 'Phone', value: '+1 (647) 710-8581', href: 'tel:+16477108581' },
-              { icon: MapPin, label: 'Serving', value: 'Toronto & Greater Toronto Area, ON', href: null },
+              { icon: MapPin, label: 'Serving', value: 'Greater Toronto Area & Ottawa, ON', href: null },
             ].map((item) => {
               const Icon = item.icon;
               return (
