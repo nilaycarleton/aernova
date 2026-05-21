@@ -7,37 +7,37 @@ import { Layers, Ruler, Shield, FileBox, Eye, Zap } from 'lucide-react';
 const services = [
   {
     icon: Layers,
-    num: '01',
+    num: '1',
     title: 'Photogrammetry & 3D Modeling',
     desc: 'We capture overlapping aerial imagery and process it into precise, textured 3D models, ready to view, measure, and share in a lightweight web viewer.',
   },
   {
     icon: Ruler,
-    num: '02',
+    num: '2',
     title: 'Aerial Measurement',
     desc: 'Sub-centimeter precision for rooftop dimensions, surface areas, linear distances, and volume calculations without a single person on the roof.',
   },
   {
     icon: Shield,
-    num: '03',
+    num: '3',
     title: 'Roof Inspection',
     desc: 'High-resolution aerial imaging identifies damage, wear patterns, and risk areas for roofers and insurers without requiring direct access.',
   },
   {
     icon: FileBox,
-    num: '04',
+    num: '4',
     title: '3D Model Exports',
     desc: 'Every project can be delivered as an optimized GLB for web viewing, plus source files for teams that need editing in professional 3D software.',
   },
   {
     icon: Eye,
-    num: '05',
+    num: '5',
     title: 'Construction Site Monitoring',
     desc: 'Track project progress over time with repeat drone flights. Compare models across milestones to catch deviations early and keep contractors aligned.',
   },
   {
     icon: Zap,
-    num: '06',
+    num: '6',
     title: 'Rapid Turnaround',
     desc: 'We process and deliver your models fast. Most projects are turned around in 12–24 hours so planning and estimating can begin immediately.',
   },
