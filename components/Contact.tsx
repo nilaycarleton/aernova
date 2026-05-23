@@ -1,4 +1,5 @@
 'use client';
+
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
@@ -6,23 +7,29 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 const WEB3FORMS_ACCESS_KEY = 'd2e3a958-efc9-41e6-abfc-ceb3e8a498e7';
 
-// Use test sitekey for localhost development, production key for deployed site
-const HCAPTCHA_SITE_KEY = 
-  typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? '10000000-ffff-ffff-ffff-000000000001' // hCaptcha test key (always passes)
-    : '50b2fe65-b00b-4b9e-ad62-3ba471098be2'; // Web3Forms production key
+// Web3Forms hCaptcha site key for free plans
+const HCAPTCHA_SITE_KEY = '50b2fe65-b00b-4b9e-ad62-3ba471098be2';
 
 export default function Contact() {
   const ref = useRef(null);
   const captchaRef = useRef<HCaptcha>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [captchaToken, setCaptchaToken] = useState('');
-  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', message: '' });
+  const [form, setForm] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -35,7 +42,6 @@ export default function Contact() {
     setSubmitting(true);
     setSubmitError('');
 
-    // Validate captcha
     if (!captchaToken) {
       setSubmitError('Please complete the captcha verification.');
       setSubmitting(false);
@@ -44,14 +50,14 @@ export default function Contact() {
 
     const formData = new FormData(e.currentTarget);
     formData.append('access_key', WEB3FORMS_ACCESS_KEY);
-    formData.append('subject', "New quote request from Aernova website");
-    formData.append('h-captcha-response', captchaToken);
+    formData.append('subject', 'New quote request from Aernova website');
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: formData,
       });
+
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -61,7 +67,7 @@ export default function Contact() {
       setSubmitted(true);
       setForm({ name: '', company: '', email: '', phone: '', message: '' });
       setCaptchaToken('');
-      // Reset captcha
+
       if (captchaRef.current) {
         captchaRef.current.resetCaptcha();
       }
@@ -71,10 +77,11 @@ export default function Contact() {
           ? error.message
           : 'Something went wrong. Please try again.'
       );
-      // Reset captcha on error
+
       if (captchaRef.current) {
         captchaRef.current.resetCaptcha();
       }
+
       setCaptchaToken('');
     } finally {
       setSubmitting(false);
@@ -97,9 +104,11 @@ export default function Contact() {
           <span className="font-mono-dm text-[0.65rem] tracking-[0.25em] uppercase text-cyan block mb-4">
             ◈ Get in Touch
           </span>
+
           <h2 className="font-display text-[clamp(2.8rem,5vw,5rem)] text-snow tracking-wide leading-none">
             REQUEST A<br />QUOTE
           </h2>
+
           <p className="font-body font-light text-frost/60 text-base mt-4 max-w-lg leading-relaxed">
             Tell us about your project and we'll get back to you within one business day with
             a tailored proposal.
@@ -107,30 +116,50 @@ export default function Contact() {
         </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-16">
-          {/* Contact info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}} 
+            animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-2 flex flex-col gap-8"
           >
             {[
-              { icon: Mail, label: 'Email', value: 'sales@aernova.ca', href: 'mailto:sales@aernova.ca' },
-              { icon: Phone, label: 'Phone', value: '+1 (647) 710-8581', href: 'tel:+16477108581' },
-              { icon: MapPin, label: 'Serving', value: 'Greater Toronto Area & Ottawa, ON', href: null },
+              {
+                icon: Mail,
+                label: 'Email',
+                value: 'sales@aernova.ca',
+                href: 'mailto:sales@aernova.ca',
+              },
+              {
+                icon: Phone,
+                label: 'Phone',
+                value: '+1 (647) 710-8581',
+                href: 'tel:+16477108581',
+              },
+              {
+                icon: MapPin,
+                label: 'Serving',
+                value: 'Greater Toronto Area & Ottawa, ON',
+                href: null,
+              },
             ].map((item) => {
               const Icon = item.icon;
+
               return (
                 <div key={item.label} className="flex items-start gap-4">
                   <div className="w-10 h-10 border border-edge flex items-center justify-center shrink-0 mt-0.5">
                     <Icon size={16} className="text-cyan" />
                   </div>
+
                   <div>
                     <span className="font-mono-dm text-[0.6rem] tracking-widest uppercase text-smoke block mb-1">
                       {item.label}
                     </span>
+
                     {item.href ? (
-                      <a href={item.href} className="font-body text-frost hover:text-cyan transition-colors text-sm">
+                      <a
+                        href={item.href}
+                        className="font-body text-frost hover:text-cyan transition-colors text-sm"
+                      >
                         {item.value}
                       </a>
                     ) : (
@@ -141,11 +170,11 @@ export default function Contact() {
               );
             })}
 
-            {/* Social / LinkedIn */}
             <div className="mt-4 pt-8 border-t border-edge">
               <span className="font-mono-dm text-[0.6rem] tracking-widest uppercase text-smoke block mb-3">
                 Connect
               </span>
+
               <div className="flex gap-3">
                 <a
                   href="https://www.linkedin.com/company/aernova-inc/"
@@ -155,6 +184,7 @@ export default function Contact() {
                 >
                   LinkedIn ↗
                 </a>
+
                 <a
                   href="https://www.instagram.com/aernova.ca/"
                   target="_blank"
@@ -167,7 +197,6 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -181,7 +210,11 @@ export default function Contact() {
                 className="h-full min-h-[300px] flex flex-col items-center justify-center gap-5 border border-cyan/30 bg-panel p-12 text-center"
               >
                 <CheckCircle size={40} className="text-cyan" />
-                <h3 className="font-display text-3xl text-snow tracking-wide">MESSAGE SENT</h3>
+
+                <h3 className="font-display text-3xl text-snow tracking-wide">
+                  MESSAGE SENT
+                </h3>
+
                 <p className="font-body font-light text-frost/60 text-sm max-w-xs leading-relaxed">
                   Thanks for reaching out! We'll respond within one business day.
                 </p>
@@ -189,15 +222,43 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { name: 'name', label: 'Your Name', type: 'text', placeholder: 'Jane Smith', colSpan: 1 },
-                  { name: 'company', label: 'Company', type: 'text', placeholder: 'ABC Contracting', colSpan: 1 },
-                  { name: 'email', label: 'Email Address', type: 'email', placeholder: 'jane@company.com', colSpan: 1 },
-                  { name: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+1 (416) 000-0000', colSpan: 1 },
+                  {
+                    name: 'name',
+                    label: 'Your Name',
+                    type: 'text',
+                    placeholder: 'Jane Smith',
+                    colSpan: 1,
+                  },
+                  {
+                    name: 'company',
+                    label: 'Company',
+                    type: 'text',
+                    placeholder: 'ABC Contracting',
+                    colSpan: 1,
+                  },
+                  {
+                    name: 'email',
+                    label: 'Email Address',
+                    type: 'email',
+                    placeholder: 'jane@company.com',
+                    colSpan: 1,
+                  },
+                  {
+                    name: 'phone',
+                    label: 'Phone (optional)',
+                    type: 'tel',
+                    placeholder: '+1 (416) 000-0000',
+                    colSpan: 1,
+                  },
                 ].map((field) => (
-                  <div key={field.name} className={field.colSpan === 2 ? 'sm:col-span-2' : ''}>
+                  <div
+                    key={field.name}
+                    className={field.colSpan === 2 ? 'sm:col-span-2' : ''}
+                  >
                     <label className="font-mono-dm text-[0.6rem] tracking-widest uppercase text-smoke block mb-2">
                       {field.label}
                     </label>
+
                     <input
                       type={field.type}
                       name={field.name}
@@ -214,6 +275,7 @@ export default function Contact() {
                   <label className="font-mono-dm text-[0.6rem] tracking-widest uppercase text-smoke block mb-2">
                     Project Description
                   </label>
+
                   <textarea
                     name="message"
                     rows={5}
@@ -225,8 +287,14 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* hCaptcha */}
                 <div className="sm:col-span-2">
+                  <input
+                    type="hidden"
+                    name="h-captcha-response"
+                    value={captchaToken}
+                    readOnly
+                  />
+
                   <HCaptcha
                     ref={captchaRef}
                     sitekey={HCAPTCHA_SITE_KEY}
@@ -245,6 +313,7 @@ export default function Contact() {
                     <Send size={14} />
                     {submitting ? 'Sending...' : 'Send Request'}
                   </button>
+
                   {submitError && (
                     <p className="font-body text-sm text-orange mt-4">
                       {submitError}
