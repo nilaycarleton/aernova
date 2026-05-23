@@ -35,6 +35,12 @@ export default function Contact() {
 
   const onHCaptchaChange = (token: string) => {
     setCaptchaToken(token);
+    setSubmitError('');
+  };
+
+  const resetCaptcha = () => {
+    setCaptchaToken('');
+    captchaRef.current?.resetCaptcha();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,8 +55,9 @@ export default function Contact() {
     }
 
     const formData = new FormData(e.currentTarget);
-    formData.append('access_key', WEB3FORMS_ACCESS_KEY);
-    formData.append('subject', 'New quote request from Aernova website');
+    formData.set('access_key', WEB3FORMS_ACCESS_KEY);
+    formData.set('subject', 'New quote request from Aernova website');
+    formData.set('h-captcha-response', captchaToken);
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -66,11 +73,7 @@ export default function Contact() {
 
       setSubmitted(true);
       setForm({ name: '', company: '', email: '', phone: '', message: '' });
-      setCaptchaToken('');
-
-      if (captchaRef.current) {
-        captchaRef.current.resetCaptcha();
-      }
+      resetCaptcha();
     } catch (error) {
       setSubmitError(
         error instanceof Error
@@ -78,11 +81,7 @@ export default function Contact() {
           : 'Something went wrong. Please try again.'
       );
 
-      if (captchaRef.current) {
-        captchaRef.current.resetCaptcha();
-      }
-
-      setCaptchaToken('');
+      resetCaptcha();
     } finally {
       setSubmitting(false);
     }
@@ -299,6 +298,14 @@ export default function Contact() {
                     ref={captchaRef}
                     sitekey={HCAPTCHA_SITE_KEY}
                     onVerify={onHCaptchaChange}
+                    onExpire={() => {
+                      setCaptchaToken('');
+                      setSubmitError('Captcha expired. Please verify again.');
+                    }}
+                    onError={() => {
+                      setCaptchaToken('');
+                      setSubmitError('Captcha could not load. Please refresh and try again.');
+                    }}
                     reCaptchaCompat={false}
                     theme="dark"
                   />
