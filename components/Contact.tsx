@@ -2,19 +2,32 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 const WEB3FORMS_ACCESS_KEY = 'd2e3a958-efc9-41e6-abfc-ceb3e8a498e7';
 
+// Use test sitekey for localhost development, production key for deployed site
+const HCAPTCHA_SITE_KEY = 
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? '10000000-ffff-ffff-ffff-000000000001' // hCaptcha test key (always passes)
+    : '50b2fe65-b00b-4b9e-ad62-3ba471098be2'; // Web3Forms production key
+
 export default function Contact() {
   const ref = useRef(null);
+  const captchaRef = useRef<HCaptcha>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
   const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', message: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,9 +35,17 @@ export default function Contact() {
     setSubmitting(true);
     setSubmitError('');
 
+    // Validate captcha
+    if (!captchaToken) {
+      setSubmitError('Please complete the captcha verification.');
+      setSubmitting(false);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     formData.append('access_key', WEB3FORMS_ACCESS_KEY);
     formData.append('subject', "New quote request from Aernova website");
+    formData.append('h-captcha-response', captchaToken);
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -39,12 +60,22 @@ export default function Contact() {
 
       setSubmitted(true);
       setForm({ name: '', company: '', email: '', phone: '', message: '' });
+      setCaptchaToken('');
+      // Reset captcha
+      if (captchaRef.current) {
+        captchaRef.current.resetCaptcha();
+      }
     } catch (error) {
       setSubmitError(
         error instanceof Error
           ? error.message
           : 'Something went wrong. Please try again.'
       );
+      // Reset captcha on error
+      if (captchaRef.current) {
+        captchaRef.current.resetCaptcha();
+      }
+      setCaptchaToken('');
     } finally {
       setSubmitting(false);
     }
@@ -194,11 +225,22 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* hCaptcha */}
+                <div className="sm:col-span-2">
+                  <HCaptcha
+                    ref={captchaRef}
+                    sitekey={HCAPTCHA_SITE_KEY}
+                    onVerify={onHCaptchaChange}
+                    reCaptchaCompat={false}
+                    theme="dark"
+                  />
+                </div>
+
                 <div className="sm:col-span-2">
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="font-mono-dm text-[0.78rem] tracking-widest uppercase text-ink bg-cyan px-10 py-4 hover:bg-[#33ddff] transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-3"
+                    className="font-mono-dm text-[0.78rem] tracking-widest uppercase text-ink bg-cyan px-10 py-4 hover:bg-[#33ddff] transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send size={14} />
                     {submitting ? 'Sending...' : 'Send Request'}

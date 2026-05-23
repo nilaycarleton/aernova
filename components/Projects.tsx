@@ -36,16 +36,15 @@ export const projects: Project[] = [
   },
   {
     id: 'project-2',
-    title: 'Residential Construction Site — Scarborough',
-    category: 'Construction Progress',
+    title: 'Residential Rooftop Survey — Scarborough',
+    category: 'Roofing Inspection',
     location: 'Scarborough, ON',
-    date: '2024-05',
+    date: '2026-05',
     description:
-      'Multi-flight site monitoring across 3 build phases. 3D models captured at foundation, framing, and envelope stages for contractor documentation.',
-    tags: ['Construction', 'Progress Tracking', '3D Model'],
+      'Multi-flight site monitoring. Delivered a web-optimized GLB model for estimating material replacement and identifying drainage issues.',
+    tags: ['Roofing', 'GLB Viewer', '3D Model'],
     modelPath: '/models/project-2/model.glb',
     thumbnailColor: 'from-orange/20 to-ink',
-    hidden: true,
   },
   {
     id: 'project-3',
