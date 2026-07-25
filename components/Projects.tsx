@@ -48,16 +48,15 @@ export const projects: Project[] = [
   },
   {
     id: 'project-3',
-    title: 'Industrial Warehouse Roof — Mississauga',
+    title: 'Commercial Apartment Survey - Ottawa',
     category: 'Aerial Measurement',
-    location: 'Mississauga, ON',
-    date: '2024-07',
+    location: 'Ottawa, ON',
+    date: '2026-06',
     description:
-      'Large-scale flat roof survey for a logistics facility. Delivered accurate square footage, slope measurements, and a 3D surface for contractor planning.',
-    tags: ['Industrial', 'Flat Roof', 'Measurement'],
+      'Large-scale roof survey for a commercial apartment complex. Delivered accurate square footage, slope measurements, and a 3D surface for re-roofing planning.',
+    tags: ['Commercial', 'GLB Viewer', 'Measurement'],
     modelPath: '/models/project-3/model.glb',
     thumbnailColor: 'from-cyan/10 to-surface',
-    hidden: true,
   },
   {
     id: 'project-4',
