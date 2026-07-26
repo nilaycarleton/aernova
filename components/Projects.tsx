@@ -45,6 +45,7 @@ export const projects: Project[] = [
     tags: ['Roofing', 'GLB Viewer', '3D Model'],
     modelPath: '/models/project-2/model.glb',
     thumbnailColor: 'from-orange/20 to-ink',
+    hidden: true,
   },
   {
     id: 'project-3',
