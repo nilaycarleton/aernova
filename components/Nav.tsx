@@ -24,7 +24,7 @@ export default function Nav() {
   return (
     <>
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
+        initial={false}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 lg:px-16 py-3 transition-all duration-300 ${
@@ -106,4 +106,3 @@ export default function Nav() {
     </>
   );
 }
-

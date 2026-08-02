@@ -1,113 +1,136 @@
 'use client';
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
+
 import { useRef } from 'react';
-import { Layers, Ruler, Shield, FileBox, Eye, Zap } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { Eye, FileBox, Layers, Ruler, Shield, Zap } from 'lucide-react';
+import { cardReveal, sectionReveal, staggerGroup, viewportOnce } from './motionPresets';
 
 const services = [
   {
     icon: Layers,
-    num: '1',
+    num: '01',
     title: 'Photogrammetry & 3D Modeling',
-    desc: 'We capture overlapping aerial imagery and process it into precise, textured 3D models, ready to view, measure, and share in a lightweight web viewer.',
+    meta: 'Capture to optimized GLB',
+    desc: 'Overlapping aerial imagery is processed into precise textured models that can be viewed, measured, annotated, and shared in-browser.',
   },
   {
     icon: Ruler,
-    num: '2',
+    num: '02',
     title: 'Aerial Measurement',
-    desc: 'Sub-centimeter precision for rooftop dimensions, surface areas, linear distances, and volume calculations without a single person on the roof.',
+    meta: 'Lengths, areas, slopes',
+    desc: 'Roof dimensions, surface areas, linear distances, and volume calculations without sending a crew onto an unsafe surface.',
   },
   {
     icon: Shield,
-    num: '3',
+    num: '03',
     title: 'Roof Inspection',
-    desc: 'High-resolution aerial imaging identifies damage, wear patterns, and risk areas for roofers and insurers without requiring direct access.',
+    meta: 'Safer site evidence',
+    desc: 'High-resolution aerial imaging helps roofers, estimators, and insurers identify damage, drainage, wear patterns, and access risks.',
   },
   {
     icon: FileBox,
-    num: '4',
+    num: '04',
     title: '3D Model Exports',
-    desc: 'Every project can be delivered as an optimized GLB for web viewing, plus source files for teams that need editing in professional 3D software.',
+    meta: 'Web + source deliverables',
+    desc: 'Projects can be delivered as optimized GLB files for web viewing plus source-ready assets for professional 3D and estimating workflows.',
   },
   {
     icon: Eye,
-    num: '5',
-    title: 'Construction Site Monitoring',
-    desc: 'Track project progress over time with repeat drone flights. Compare models across milestones to catch deviations early and keep contractors aligned.',
+    num: '05',
+    title: 'Construction Monitoring',
+    meta: 'Progress over time',
+    desc: 'Repeat flights create comparable visual records across milestones so contractors can spot deviations and keep teams aligned.',
   },
   {
     icon: Zap,
-    num: '6',
+    num: '06',
     title: 'Rapid Turnaround',
-    desc: 'We process and deliver your models fast. Most projects are turned around in 12–24 hours so planning and estimating can begin immediately.',
+    meta: 'Typical 12-24h delivery',
+    desc: 'Structured field capture and processing workflows help get usable site data back to your team while decisions are still active.',
   },
 ];
 
 export default function Services() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const inView = useInView(ref, viewportOnce);
 
   return (
-    <section id="services" className="relative py-32 bg-surface border-t border-b border-edge">
-      {/* Diagonal accent stripe */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
+    <section id="services" className="relative py-28 lg:py-32 bg-surface border-t border-b border-edge overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan/45 to-transparent" />
+      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(90deg,transparent_0,transparent_calc(100%-1px),rgba(0,212,255,0.08)_calc(100%-1px))] bg-[length:25%_100%]" />
 
       <div className="relative z-10 px-8 lg:px-16" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-20"
+          variants={sectionReveal}
+          initial={false}
+          animate="visible"
+          className="mb-16 lg:mb-20 grid lg:grid-cols-[0.8fr_1fr] gap-8 items-end"
         >
-          <span className="font-mono-dm text-[0.65rem] tracking-[0.25em] uppercase text-cyan block mb-4">
-            ◈ What We Do
-          </span>
-          <h2 className="font-display text-[clamp(2.8rem,5vw,5rem)] text-snow tracking-wide leading-none">
-            OUR SERVICES
-          </h2>
-          <p className="font-body font-light text-frost/60 text-lg mt-4 max-w-xl leading-relaxed">
-            From raw aerial data collection to polished 3D deliverables which are built for contractors
-            who need accuracy, not guesswork.
+          <div>
+            <span className="font-mono-dm text-[0.65rem] tracking-[0.25em] uppercase text-cyan block mb-4">
+              What We Do
+            </span>
+            <h2 className="font-display text-[clamp(2.8rem,5vw,5rem)] text-snow tracking-wide leading-none">
+              TECHNICAL<br />CAPABILITIES
+            </h2>
+          </div>
+          <p className="font-body font-light text-frost/64 text-lg max-w-2xl leading-relaxed lg:justify-self-end">
+            Practical drone data for contractors who need measurements, documentation,
+            and shareable 3D assets without slowing down the site.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-edge">
-          {services.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <motion.div
-                key={s.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="group bg-panel p-10 relative overflow-hidden hover:bg-[#111828] transition-colors duration-300"
-              >
-                {/* Top accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <motion.div
+          variants={staggerGroup}
+          initial={false}
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px bg-edge"
+        >
+          {services.map((service) => {
+            const Icon = service.icon;
 
-                {/* Big background number */}
-                <span className="font-display text-[6rem] text-cyan/4 absolute -top-2 right-4 leading-none select-none">
-                  {s.num}
+            return (
+              <motion.article
+                key={service.title}
+                variants={cardReveal}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                className="group industrial-panel p-8 lg:p-9 relative overflow-hidden min-h-[300px]"
+              >
+                <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-cyan/0 via-cyan/55 to-cyan/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="font-display text-[6rem] text-cyan/5 absolute -top-3 right-5 leading-none select-none">
+                  {service.num}
                 </span>
 
-                <Icon
-                  size={36}
-                  className="text-cyan mb-6 relative z-10"
-                  strokeWidth={1.5}
-                />
+                <div className="relative z-10 flex h-full flex-col">
+                  <div className="mb-7 flex items-center justify-between">
+                    <div className="w-12 h-12 border border-edge bg-ink/50 flex items-center justify-center group-hover:border-cyan/45 transition-colors">
+                      <Icon size={24} className="text-cyan" strokeWidth={1.45} />
+                    </div>
+                    <span className="font-mono-dm text-[0.58rem] tracking-widest uppercase text-smoke">
+                      {service.meta}
+                    </span>
+                  </div>
 
-                <h3 className="font-display text-2xl text-snow tracking-wide mb-4 leading-tight relative z-10">
-                  {s.title.toUpperCase()}
-                </h3>
+                  <h3 className="font-display text-3xl text-snow tracking-wide leading-tight mb-5">
+                    {service.title.toUpperCase()}
+                  </h3>
 
-                <p className="font-body font-light text-[0.9rem] text-smoke leading-relaxed relative z-10">
-                  {s.desc}
-                </p>
-              </motion.div>
+                  <p className="font-body font-light text-[0.94rem] text-smoke leading-relaxed">
+                    {service.desc}
+                  </p>
+
+                  <div className="mt-auto pt-8">
+                    <div className="h-px w-full bg-edge mb-3" />
+                    <span className="font-mono-dm text-[0.58rem] tracking-widest uppercase text-cyan/75">
+                      Aernova field workflow
+                    </span>
+                  </div>
+                </div>
+              </motion.article>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

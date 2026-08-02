@@ -8,6 +8,7 @@
   --font-display: 'Bebas Neue';
   --font-mono: 'DM Mono';
   --font-body: 'Barlow';
+  --ease-industrial: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -19,23 +20,45 @@ html {
 }
 
 body {
-  background: #04080F;
+  background-color: #04080F;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.014) 0,
+      rgba(255, 255, 255, 0.014) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    radial-gradient(circle at 18% 18%, rgba(0, 212, 255, 0.04), transparent 28%),
+    radial-gradient(circle at 85% 22%, rgba(255, 107, 26, 0.035), transparent 24%);
+  background-size: 64px 64px, 64px 64px, 12px 12px, auto, auto;
+  background-attachment: fixed;
   color: #C8D8F0;
   font-family: 'Barlow', sans-serif;
   overflow-x: hidden;
+  position: relative;
 }
 
-/* Grid overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px);
-  background-size: 64px 64px;
-  pointer-events: none;
-  z-index: 0;
+body > main,
+body > footer {
+  position: relative;
+  z-index: 1;
+}
+
+a,
+button,
+input,
+textarea {
+  outline-offset: 4px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid #00D4FF;
 }
 
 /* Scrollbar */
@@ -54,4 +77,43 @@ body::before {
   .font-display { font-family: 'Bebas Neue', sans-serif; }
   .font-mono-dm { font-family: 'DM Mono', monospace; }
   .font-body { font-family: 'Barlow', sans-serif; }
+  .industrial-panel {
+    background:
+      linear-gradient(180deg, rgba(14, 21, 37, 0.96), rgba(10, 14, 26, 0.96)),
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 10px);
+  }
+  .corner-markers {
+    position: relative;
+  }
+  .corner-markers::before,
+  .corner-markers::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+  .corner-markers::before {
+    left: 12px;
+    top: 12px;
+    border-left: 1px solid rgba(0, 212, 255, 0.45);
+    border-top: 1px solid rgba(0, 212, 255, 0.45);
+  }
+  .corner-markers::after {
+    right: 12px;
+    bottom: 12px;
+    border-right: 1px solid rgba(0, 212, 255, 0.45);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }
