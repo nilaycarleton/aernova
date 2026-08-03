@@ -92,6 +92,34 @@ test('project preview and modal canvases render nonblank pixels', async ({
   });
 });
 
+test('model viewer header controls stay clickable', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Modal header interaction coverage runs against the desktop project.');
+
+  await page.goto('/');
+  await page.locator('#projects').scrollIntoViewIfNeeded();
+
+  await page.getByRole('button', { name: /open 3d viewer/i }).first().click();
+
+  const viewer = page.locator('.fixed.inset-0').filter({
+    has: page.getByText(/drag to rotate/i),
+  });
+  await expect(viewer).toBeVisible();
+
+  await viewer.getByRole('button', { name: /^close$/i }).click();
+  await expect(viewer).toHaveCount(0);
+
+  await page.getByRole('button', { name: /open 3d viewer/i }).first().click();
+  const reopenedViewer = page.locator('.fixed.inset-0').filter({
+    has: page.getByText(/drag to rotate/i),
+  });
+  await expect(reopenedViewer).toBeVisible();
+
+  await reopenedViewer.getByRole('link', { name: /request similar project/i }).click();
+  await expect(reopenedViewer).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: /request a quote/i })).toBeVisible();
+  await expect(page).toHaveURL(/#contact$/);
+});
+
 test('mobile viewport keeps navigation, CTA, and footer usable', async ({
   page,
   isMobile,

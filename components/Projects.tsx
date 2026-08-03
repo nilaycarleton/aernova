@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Calendar, Maximize2, MapPin, MousePointer2, X } from 'lucide-react';
 import ModelViewer from './ModelViewer';
@@ -117,12 +118,40 @@ function ProjectThumbnail({ project }: { project: Project }) {
 
 // ── Full-screen modal with live 3D viewer ──
 function ModelModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onClose]);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-ink/96 backdrop-blur-2xl flex flex-col"
+      className="fixed inset-0 z-[80] bg-ink/96 backdrop-blur-2xl flex flex-col"
     >
       {/* Modal header */}
       <motion.div
@@ -130,7 +159,7 @@ function ModelModal({ project, onClose }: { project: Project; onClose: () => voi
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -18, opacity: 0 }}
         transition={{ duration: 0.28 }}
-        className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-edge shrink-0 bg-surface/60"
+        className="relative z-10 flex items-center justify-between px-6 md:px-8 py-5 border-b border-edge shrink-0 bg-surface/60"
       >
         <div>
           <span className="font-mono-dm text-[0.65rem] tracking-widest uppercase text-cyan block mb-1">
@@ -141,6 +170,7 @@ function ModelModal({ project, onClose }: { project: Project; onClose: () => voi
           </h3>
         </div>
         <button
+          type="button"
           onClick={onClose}
           className="text-smoke hover:text-frost transition-colors p-3 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Close"
@@ -232,7 +262,8 @@ function ModelModal({ project, onClose }: { project: Project; onClose: () => voi
           </a>
         </motion.aside>
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }
 
